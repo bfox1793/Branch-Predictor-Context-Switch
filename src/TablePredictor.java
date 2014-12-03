@@ -6,12 +6,13 @@ import java.util.Queue;
 
 public class TablePredictor extends BranchPredictor{
 	
-	Node pastValues = null;
+	boolean[] pastValues = null;
 	
 	Map<Integer, Boolean> mappedValues = new HashMap<Integer, Boolean>();
 	
 	public TablePredictor (int bitsRemembered){
 		super();
+		pastValues = new boolean[bitsRemembered];
 				
 		initialize(bitsRemembered);
 
@@ -21,12 +22,7 @@ public class TablePredictor extends BranchPredictor{
 	private void initialize(int bitsRemembered){
 		
 		for (int i=0; i < bitsRemembered; i++){
-			if (pastValues==null){
-				pastValues = new Node(false);
-			}
-			else {
-				pastValues.add(false);
-			}
+			pastValues[i] = false;
 		}
 		
 		int rememberedSizes = (int)Math.pow(2, bitsRemembered);
@@ -41,11 +37,11 @@ public class TablePredictor extends BranchPredictor{
 		int previousValueIndex = 0;
 		
 		
-		/*for (int i=pastValues.size()-1; i >=0;i--){
+		for (int i=pastValues.length-1; i >=0;i--){
 			if (pastValues[i]){
 				previousValueIndex+=(int)Math.pow(2, i);
 			}
-		}*/
+		}
 		
 		
 		
@@ -60,25 +56,12 @@ public class TablePredictor extends BranchPredictor{
 		
 		mappedValues.put(previousValueIndex, currInfo.isTaken());
 		
-		
-	}
-	
-	public class Node{
-		private boolean taken;
-		private Node next;
-		public Node(boolean isTaken){
-			taken = isTaken;
-			next = null;
+		for (int i=1; i < pastValues.length; i++){
+			pastValues[i] = pastValues[i-1];
 		}
 		
-		public boolean isTaken(){
-			return taken;
-		}
+		pastValues[0] = currInfo.isTaken();
 		
-		public void add(boolean taken){
-			Node nextNode = new Node(taken);
-			this.next = nextNode;
-		}
 		
 	}
 
