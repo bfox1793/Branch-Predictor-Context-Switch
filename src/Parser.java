@@ -9,6 +9,7 @@ import java.util.Queue;
 public class Parser {
 	
 	public static final String ANAGRAM = "anagram.txt";
+	public static final String GCC = "GCC.txt";
 	public int count = 0;
 	public static void main(String[] args){
 		Parser currParser = new Parser();
@@ -22,6 +23,17 @@ public class Parser {
 		
 		String hello = "";
 		hello = "hi";
+	}
+	
+	public Queue<BranchInformation> parseGcc(){
+		try {
+			return parseFile(GCC);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return null;
 	}
 	
 	public Queue<BranchInformation> parseAnagram(){
