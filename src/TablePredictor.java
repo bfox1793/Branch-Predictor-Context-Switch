@@ -28,16 +28,19 @@ public class TablePredictor extends BranchPredictor{
 		int rememberedSizes = (int)Math.pow(2, bitsRemembered);
 		
 		for (int i=0; i < rememberedSizes; i++){
-			mappedValues.put(i, false);
+			mappedValues.put(i, true);
 		}
 	}
 
 	@Override
 	public void branch(BranchInformation currInfo) {
+		
+		if (currInfo==null) return;
+		
 		int previousValueIndex = 0;
 		
 		
-		for (int i=pastValues.length-1; i >=0;i--){
+		for (int i=0; i < pastValues.length;i++){
 			if (pastValues[i]){
 				previousValueIndex+=(int)Math.pow(2, i);
 			}

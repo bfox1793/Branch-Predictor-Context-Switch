@@ -64,7 +64,7 @@ public class Parser {
 			String[] information = line.split(":");
 			count++;
 			boolean isTaken = false;
-			if (information[0].equals("TAKEN")){
+			if (information[0].equals("T")){
 				isTaken = true;
 			}
 			
