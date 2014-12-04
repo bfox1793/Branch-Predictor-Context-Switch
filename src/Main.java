@@ -3,8 +3,8 @@ import java.util.Queue;
 
 
 public class Main {
-	private static final int PREDICTOR_SIZE = 6;
-	private static final int CONTEXT_SWITCH_AMOUNT = 25;
+	private static final int PREDICTOR_SIZE = 10;
+	private static final int CONTEXT_SWITCH_AMOUNT = 1000;
 	private static final String GO_SHORT = "GO_short.txt";
 	private static final String ANAGRAM_SHORT = "anagram_short.txt";
 
@@ -12,28 +12,32 @@ public class Main {
 		Parser parse = new Parser();
 		
 		Queue<BranchInformation> anagramInfo = parse.parseAnagram();
+		Queue<BranchInformation> anagramShortInfo = null;
 		Queue<BranchInformation> gccInfo = parse.parseGcc();
 		Queue<BranchInformation> goInfo = null;
 		
 		try {
 			goInfo = parse.parseFile(GO_SHORT);
+			anagramShortInfo = parse.parseFile(ANAGRAM_SHORT);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		basicTest(anagramInfo, gccInfo, goInfo);
+		basicTest(anagramShortInfo, gccInfo, goInfo);
 		anagramInfo = parse.parseAnagram();
 		gccInfo = parse.parseGcc();
+		Queue<BranchInformation> anagramShortInfo2 = null;
 		try {
 			goInfo = parse.parseFile(GO_SHORT);
+			anagramShortInfo = parse.parseFile(ANAGRAM_SHORT);
+			anagramShortInfo2 = parse.parseFile(ANAGRAM_SHORT);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		contextSwitchTest(gccInfo, goInfo);
 		
-		
+		contextSwitchTest(anagramShortInfo, anagramShortInfo2);
 		
 		
 	}
@@ -41,14 +45,17 @@ public class Main {
 	private static void contextSwitchTest(Queue<BranchInformation> anagramInfo,
 			Queue<BranchInformation> gccInfo) {
 		
+		BasicPredictor basicPred = new BasicPredictor(PREDICTOR_SIZE);
 		TablePredictor predictor = new TablePredictor(PREDICTOR_SIZE);
 
-		while (anagramInfo.size() > 0 && gccInfo.size() > 0){
+		while (anagramInfo.size() > 0 || gccInfo.size() > 0){
 			BranchInformation currInfo = getNextInfo(anagramInfo, gccInfo);		
 			predictor.branch(currInfo);
+			basicPred.branch(currInfo);
 		}
 		
-		System.out.println("Context Switch Result: " + predictor.getAccuracy());
+		System.out.println("Basic Context Switch Result: " + basicPred.getAccuracy());
+		System.out.println("Table Context Switch Result: " + predictor.getAccuracy());
 	}
 
 	private static void basicTest(

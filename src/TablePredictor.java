@@ -28,7 +28,7 @@ public class TablePredictor extends BranchPredictor{
 		int rememberedSizes = (int)Math.pow(2, bitsRemembered);
 		
 		for (int i=0; i < rememberedSizes; i++){
-			mappedValues.put(i, true);
+			mappedValues.put(i, false);
 		}
 	}
 
@@ -59,7 +59,7 @@ public class TablePredictor extends BranchPredictor{
 		
 		mappedValues.put(previousValueIndex, currInfo.isTaken());
 		
-		for (int i=1; i < pastValues.length; i++){
+		for (int i=pastValues.length-1; i > 0 ; i--){
 			pastValues[i] = pastValues[i-1];
 		}
 		

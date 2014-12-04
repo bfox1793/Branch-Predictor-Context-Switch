@@ -9,7 +9,7 @@ public class BasicPredictor extends BranchPredictor{
 		super();
 		upperBound = (int)Math.pow(2,numBits)-1;
 		
-		currentCount = upperBound/2;
+		currentCount = 0;
 	}
 	@Override
 	public void branch(BranchInformation currInfo) {
